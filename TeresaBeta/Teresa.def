@@ -1,0 +1,8 @@
+LIBRARY
+EXPORTS
+	Teresa1 = Teresa1 @1
+	Teresa2 = Teresa2 @2
+	Teresa3 = Teresa3 @3
+	Teresa4 = Teresa4 @4
+	Teresa5 = Teresa5 @5
+	Teresa6 = Teresa6 @6
