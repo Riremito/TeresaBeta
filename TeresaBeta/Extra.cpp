@@ -1,5 +1,14 @@
 #include"Teresa.h"
 
+void Extra() {
+	Rosemary r;
+	HideProcesses(r); // unchanged v404 to v415
+	MemoryMap(); // unchanged v404 to v415
+	HWIDRandomizer(r); // unchanged v404 to v415
+	MultiClient(); // unchanged v404 to v415
+	SkipLauncher(r); // Launcher is updated in v415 (it had not changed for 15 years)
+}
+
 // Multi Client Part
 #define MAPLE_MUTEX L"WvsClientMtx"
 decltype(CreateMutexExW) *_CreateMutexExW = NULL;
@@ -90,8 +99,7 @@ void MIDLib_GetMachineId_Hook(BYTE *HWID) {
 	GenarateHWIDChecker(HWID);
 }
 
-bool HWIDRandomizer() {
-	Rosemary r;
+bool HWIDRandomizer(Rosemary &r) {
 	ULONG_PTR uLogin = r.Scan(L"4C 89 4C 24 20 4C 89 44 24 18 89 54 24 10 48 89 4C 24 08 57 48 81 EC ?? ?? ?? ?? 48 8B 05 ?? ?? ?? ?? 48 33 C4 48 89 84 24 ?? ?? ?? ?? 48 8B 84 24 ?? ?? ?? ?? 83 B8 ?? ?? ?? ?? 00 74");
 	if (!uLogin) {
 		KILLFORSAFETY(L"Error: HWIDRandomizer Initialization");
@@ -106,9 +114,7 @@ bool HWIDRandomizer() {
 }
 // ==============================
 // Process List Stealer Blocker
-bool HideProcesses() {
-	// 完全に送信をブロック
-	Rosemary r;
+bool HideProcesses(Rosemary &r) {
 	ULONG_PTR uProcessListPacketMaker = r.Scan(L"48 83 EC 48 48 8D 0D ?? ?? ?? ?? E8 ?? ?? ?? ?? 0F B6 C0 85 C0 75 ?? 48 8D 15 ?? ?? ?? ?? 48 8D 4C 24 28 E8");
 
 	if (!uProcessListPacketMaker) {
@@ -121,5 +127,20 @@ bool HideProcesses() {
 	SCANRES(uProcessListPacketMaker);
 	return true;
 }
+// ==============================
+// Launcher Skip
+bool SkipLauncher(Rosemary &r) {
+	ULONG_PTR uSkipLauncher = r.Scan(L"48 89 5C 24 20 56 41 56 41 57 48 81 EC ?? ?? ?? ?? 48 8B 05 ?? ?? ?? ?? 48 33 C4 48 89 84 24 ?? ?? ?? ?? 48 8B F1 33 C9 FF 15");
+	SCANRES(uSkipLauncher);
+
+	if (!uSkipLauncher) {
+		return false;
+	}
+
+	r.Patch(uSkipLauncher, L"48 31 C0 48 FF C0 C3");
+	return true;
+}
+// ==============================
+// ==============================
 // ==============================
 // ==============================

@@ -7,10 +7,12 @@
 #pragma intrinsic(_ReturnAddress)
 
 bool RemoveBC();
+void Extra();
 bool MemoryMap();
 bool MultiClient();
-bool HWIDRandomizer();
-bool HideProcesses();
+bool HWIDRandomizer(Rosemary &r);
+bool HideProcesses(Rosemary &r);
+bool SkipLauncher(Rosemary &r);
 
 #define KILLFORSAFETY(msg) \
 {\
